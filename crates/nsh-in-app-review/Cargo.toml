@@ -1,0 +1,31 @@
+[package]
+name = "nsh-in-app-review"
+description = "Request the native in-app review prompt on iOS and Android, with a store fallback"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[lib]
+name = "nsh_in_app_review"
+path = "src/lib.rs"
+
+[dependencies]
+nsh-core = "0.4.0"
+thiserror = "2"
+tokio = { version = "1", default-features = false, features = ["sync", "time"] }
+
+# Apple: StoreKit's SKStoreReviewController requests the review flow; the default features have it.
+[target.'cfg(target_vendor = "apple")'.dependencies]
+objc2-store-kit = "0.3"
+
+# Android: Google Play's review flow over JNI. ndk-context carries the VM and the activity.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.22"
+ndk-context = "0.1"
+libc = "0.2"
+
+[dev-dependencies]
+tokio = { version = "1", default-features = false, features = ["rt", "rt-multi-thread", "macros", "time"] }

@@ -1,0 +1,10 @@
+{
+  "name": "nsh-in-app-review tests",
+  "id": "dev.supernsh.in_app_review.tests",
+  "version": "0.1.0",
+  "build": 1,
+  "rust": "../../crates/nsh-in-app-review",
+  "capabilities": {
+    "openUrl": true
+  }
+}
