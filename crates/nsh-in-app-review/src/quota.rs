@@ -6,7 +6,7 @@ use std::{
 };
 
 /// How many requests the rolling window holds.
-const MAX_REQUESTS: usize = 4;
+const MAX_REQUESTS: usize = 3;
 /// The window's length: 365 days of seconds.
 const WINDOW: i64 = 365 * 24 * 3600;
 
@@ -56,7 +56,7 @@ impl MemoryQuotaTracker {
 
     /// Drops the timestamps that left the window at `now`.
     fn expire(&self, times: &mut Vec<i64>, now: i64) {
-        times.retain(|&t| t > now - WINDOW * 2);
+        times.retain(|&t| t > now - WINDOW);
     }
 }
 
