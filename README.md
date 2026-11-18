@@ -6,15 +6,16 @@ Part of the Native Shell (NSH) capability set. Same layout as the other SuperNSH
 
 ## Status
 
-**Implemented, not yet verified by CI.** Everything landed in one working session: the Rust crate in `crates/nsh-in-app-review` — the `InAppReview` service with a one-flow gate and a client-side quota of three requests per rolling 365 days, five coded error kinds, the `Backend` and `UrlOpener` traits with `FakeBackend`/`FakeOpener`, the `NativeInAppReview` class, and five platform bridges (Apple StoreKit, Android Play Review over JNI, Windows/Linux/web store fallbacks) plus `UnsupportedBackend` — and the TypeScript mirror in `packages/nsh-in-app-review` with the same API and behavior. Tests: 21 in Rust, 20 in TypeScript.
+**Implemented and verified by CI on `master`.** The Rust crate in `crates/nsh-in-app-review` has the `InAppReview` service (one-flow gate, client-side quota of three requests per rolling 365 days, five coded error kinds), the `Backend` and `UrlOpener` traits with `FakeBackend`/`FakeOpener`, the `NativeInAppReview` class, and the platform bridges (Apple StoreKit, Android Play Review over JNI, Windows/Linux/web store fallbacks). The TypeScript package in `packages/nsh-in-app-review` mirrors the API and behavior. Every edge case E1-E12 in [docs/goals.md](docs/goals.md) has a test in both languages.
 
-The gates — `cargo fmt --all -- --check`, `cargo clippy --all-targets -- -D warnings`, `cargo test --all-targets`, `nsh check`, `nsh test`, and local cross-target compiles for `aarch64-apple-ios` and `wasm32-unknown-unknown` — ran locally in that session and passed. No commit was made and no CI run has happened: the push to `master` produces the first real run, and until it passes nothing here is CI-verified.
+Verification: CI run https://github.com/SuperNSH/in-app-review/actions/runs/44400940982 passed all jobs: `rust` (fmt, clippy, `cargo test --all-targets`), `typescript` (`nsh check`, `nsh build` with no warnings, `nsh test`), and the cross-checks for `aarch64-apple-ios`, `aarch64-linux-android` and `wasm32-unknown-unknown`. The quota and in-progress tests were seen to fail once: run https://github.com/SuperNSH/in-app-review/actions/runs/44382186530 (commit 0f99e50, limit 4, doubled window, in-progress code changed) failed 7 TypeScript tests and did not pass the Rust job; the revert is green.
 
-Three limits, stated plainly:
+Limits:
 
-- The bridges have never been exercised on real hardware or emulators. AGENTS.md forbids running them on a developer's machine, and CI does not run them on a device either.
-- The local cross-compile for Android, Windows and Linux stopped at `ring`'s C dependency: no NDK clang, mingw or aarch64-linux-gnu-gcc on the machine. Cross-compiling them is what CI's cross-check job owns (`aarch64-apple-ios`, `aarch64-linux-android` with the NDK, `wasm32-unknown-unknown`).
+- The bridges have never run on a device or emulator. AGENTS.md forbids that here and CI only compiles them (clippy cross-check). Blocked: needs real hardware or store accounts.
+- Store URL formats are tested through fakes on Linux in CI. `the_real_apple_bridge_builds_the_listing_url` runs only on Apple hosts, and CI has no Apple test job (the iOS job is a clippy cross-check), so the real Apple, Windows and Android bridges are compile-checked only.
 - The app must bundle `com.google.android.play:review` for the Android bridge.
+- Do not call `request_review` from a button the user expects to do something: the OS may show nothing, and `Ok(true)` only means the request was handed over.
 
 What 0.1.0 must do is in [docs/goals.md](docs/goals.md); per-API status against the two references is in [docs/parity.md](docs/parity.md).
 

@@ -2,7 +2,7 @@
 
 One row per public API of the two references: `in_app_review` (Flutter) and `react-native-in-app-review` (React Native). Our surface is `InAppReview` in Rust (`is_available`, `request_review`, `open_store_listing`) and the same methods in camelCase on the TS `InAppReview`.
 
-Status key: **test in both languages** — the Rust crate and the TS package, with the test suites of both, are being landed in this same working session (this build); nothing is pushed and no CI run has happened, so per AGENTS.md every row's status stays unverified until CI passes on `master`. **not implemented** — no code; the row says why. At any read time the tree may hold all, part or none of this landing; read the status column as what this build is landing, not as an independently verified fact.
+Status key: **test in both languages** — the Rust crate and the TS package both implement the row and have tests for it; these passed in CI run https://github.com/SuperNSH/in-app-review/actions/runs/44400940982 on `master`. **not implemented** — no code; the row says why. Real devices, emulators and store accounts are out of reach, so no row claims the native prompt was seen on a device.
 
 | Reference API | Ours | What ours does | Status |
 |---|---|---|---|
