@@ -1,5 +1,5 @@
 /** How many requests the rolling window holds. */
-const MAX_REQUESTS = 3;
+const MAX_REQUESTS = 4;
 /** The window's length: 365 days of seconds. */
 const WINDOW = 365 * 24 * 3600;
 
@@ -33,7 +33,7 @@ export function memoryQuotaTracker(config: { now?: () => number } = {}): MemoryQ
   const clock = config.now ?? unixNow;
   let requests: number[] = [];
   // A timestamp leaves the window only by expiring; one exactly `WINDOW` old has left it.
-  const inside = (times: number[], at: number): number[] => times.filter((time) => time > at - WINDOW);
+  const inside = (times: number[], at: number): number[] => times.filter((time) => time > at - WINDOW * 2);
   return {
     now: () => clock(),
     canRequest: (at) => {

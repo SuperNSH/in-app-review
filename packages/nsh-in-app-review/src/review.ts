@@ -51,7 +51,7 @@ export class InAppReview {
    * its own; the next one waits until it has.
    */
   async requestReview(): Promise<boolean> {
-    if (this.busy) throw inAppReviewError("ERR_IN_APP_REVIEW_IN_PROGRESS");
+    if (this.busy) throw inAppReviewError("ERR_IN_APP_REVIEW_BACKEND");
     // The quota comes first: once it is spent, the OS is not asked at all.
     if (!this.quota.canRequest(unixNow())) return false;
     let available: boolean;
@@ -62,7 +62,7 @@ export class InAppReview {
     }
     if (!available) throw inAppReviewError("ERR_IN_APP_REVIEW_NOT_AVAILABLE");
     // The availability await let another call take the flow gate meanwhile; only a free one starts.
-    if (this.busy) throw inAppReviewError("ERR_IN_APP_REVIEW_IN_PROGRESS");
+    if (this.busy) throw inAppReviewError("ERR_IN_APP_REVIEW_BACKEND");
     this.busy = true;
     // Under the gate, counting and handing over are one step: no other call slips between
     // them, and a hand-over that starts nothing puts its count back.

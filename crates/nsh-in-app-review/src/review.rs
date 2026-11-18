@@ -89,7 +89,7 @@ impl InAppReview {
     /// to finish on its own; the next one waits until it has.
     pub async fn request_review(&self) -> Result<bool, InAppReviewError> {
         if self.shared.gate().busy {
-            return Err(InAppReviewError::new(ErrorKind::InProgress));
+            return Err(InAppReviewError::new(ErrorKind::Backend));
         }
         // The quota comes first: once it is spent, the OS is not asked at all.
         if !self.shared.quota.can_request(unix_now()) {
@@ -102,7 +102,7 @@ impl InAppReview {
         {
             let mut gate = self.shared.gate();
             if gate.busy {
-                return Err(InAppReviewError::new(ErrorKind::InProgress));
+                return Err(InAppReviewError::new(ErrorKind::Backend));
             }
             gate.busy = true;
             gate.waiting = Some(sender);
