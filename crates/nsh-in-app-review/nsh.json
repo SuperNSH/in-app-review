@@ -1,0 +1,8 @@
+{
+  "nsh": ">=0.6",
+  "exports": {
+    "nsh-in-app-review": "tsx/index.ts",
+    "nsh-in-app-review/rust": "tsx/rust.ts",
+    "nsh-in-app-review/memory": "tsx/memory.ts"
+  }
+}

@@ -4,6 +4,18 @@ Request the native in-app review prompt on iOS and Android, with a store fallbac
 
 Part of the Native Shell (NSH) capability set. Same layout as the other SuperNSH repos: a Rust crate, a TypeScript package, docs in `docs/`, CI on GitHub Actions, and a web status page on GitHub Pages at https://supernsh.github.io/in-app-review/.
 
+## Install
+
+In the app's directory:
+
+```sh
+nsh add nsh-in-app-review
+```
+
+`nsh add` needs NSH main or the nightly: the 0.6.0 and 0.6.1 releases do not have it. In a Rust app, `cargo add nsh-in-app-review` works with any of them.
+
+TSX code imports from `nsh-in-app-review`.
+
 ## Status
 
 **Implemented and verified by CI on `master`.** The Rust crate in `crates/nsh-in-app-review` has the `InAppReview` service (one-flow gate, client-side quota of three requests per rolling 365 days, five coded error kinds), the `Backend` and `UrlOpener` traits with `FakeBackend`/`FakeOpener`, the `NativeInAppReview` class, and the platform bridges (Apple StoreKit, Android Play Review over JNI, Windows/Linux/web store fallbacks). The TypeScript package in `packages/nsh-in-app-review` mirrors the API and behavior. Every edge case E1-E12 in [docs/goals.md](docs/goals.md) has a test in both languages.
