@@ -12,7 +12,7 @@ In the app's directory:
 nsh add nsh-in-app-review
 ```
 
-`nsh add` needs NSH 0.7.0 or later: the 0.6.0 and 0.6.1 releases do not have it. In a Rust app, `cargo add nsh-in-app-review` pulls in nsh-core 0.7.
+Needs NSH 0.7.1 or later. In a Rust app, `cargo add nsh-in-app-review` pulls in nsh-core 0.7.
 
 TSX code imports from `nsh-in-app-review`.
 
